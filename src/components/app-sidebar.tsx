@@ -16,24 +16,29 @@ import {
   Activity,
   Brain,
   Calendar,
-  MessageSquare,
-  Settings,
-  Zap,
+  Users,
+  ListTodo,
   Terminal,
+  Zap,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navItems = [
   {
-    title: "Status",
+    title: "Overview",
     href: "/",
     icon: Activity,
   },
   {
-    title: "Chat",
-    href: "/chat",
-    icon: MessageSquare,
+    title: "Tasks",
+    href: "/tasks",
+    icon: ListTodo,
+  },
+  {
+    title: "Agents",
+    href: "/agents",
+    icon: Users,
   },
   {
     title: "Sessions",
@@ -67,7 +72,7 @@ export function AppSidebar() {
               Hex
             </span>
             <span className="text-xs text-muted-foreground">
-              Dashboard
+              Command Center
             </span>
           </div>
         </Link>
@@ -81,7 +86,8 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map((item) => {
-                const isActive = pathname === item.href;
+                const isActive = pathname === item.href || 
+                  (item.href !== "/" && pathname.startsWith(item.href));
                 return (
                   <SidebarMenuItem key={item.href}>
                     <SidebarMenuButton
