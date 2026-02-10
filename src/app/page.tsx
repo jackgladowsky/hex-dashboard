@@ -15,8 +15,8 @@ import {
   Terminal,
   Clock,
 } from "lucide-react";
-import { formatAge, formatTokens } from "@/lib/clawdbot";
-import type { GatewayHealth, SessionInfo } from "@/lib/clawdbot";
+import { formatAge, formatTokens } from "@/lib/types";
+import type { GatewayHealth, SessionInfo } from "@/lib/types";
 
 interface StatusData {
   health: GatewayHealth;

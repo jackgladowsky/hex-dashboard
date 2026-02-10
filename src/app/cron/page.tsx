@@ -16,8 +16,8 @@ import {
   Timer,
   AlertCircle,
 } from "lucide-react";
-import { formatAge, formatDuration } from "@/lib/clawdbot";
-import type { CronJob, CronListResponse } from "@/lib/clawdbot";
+import { formatAge, formatDuration } from "@/lib/types";
+import type { CronJob, CronListResponse } from "@/lib/types";
 
 export default function CronPage() {
   const [data, setData] = useState<CronListResponse | null>(null);

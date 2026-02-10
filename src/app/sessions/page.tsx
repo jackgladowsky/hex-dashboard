@@ -16,8 +16,8 @@ import {
   Calendar,
   Bot,
 } from "lucide-react";
-import { formatAge, formatTokens, parseSessionKey, getSessionIcon } from "@/lib/clawdbot";
-import type { SessionInfo, SessionsListResponse } from "@/lib/clawdbot";
+import { formatAge, formatTokens, parseSessionKey, getSessionIcon } from "@/lib/types";
+import type { SessionInfo, SessionsListResponse } from "@/lib/types";
 
 export default function SessionsPage() {
   const [data, setData] = useState<SessionsListResponse | null>(null);

@@ -17,8 +17,8 @@ import {
   Search,
   Edit2,
 } from "lucide-react";
-import { formatFileSize, isDateFile, extractDate } from "@/lib/memory";
-import type { MemoryFile, MemoryFileContent } from "@/lib/memory";
+import { formatFileSize, isDateFile, extractDate } from "@/lib/types";
+import type { MemoryFile, MemoryFileContent } from "@/lib/types";
 
 export default function MemoryPage() {
   const [files, setFiles] = useState<MemoryFile[]>([]);

@@ -1,22 +1,8 @@
+// Server-side only - Memory file operations
 import { readdir, readFile, writeFile, stat } from "fs/promises";
-import { join, basename } from "path";
+import { join } from "path";
 import { homedir } from "os";
-
-export interface MemoryFile {
-  name: string;
-  path: string;
-  relativePath: string;
-  size: number;
-  modifiedAt: number;
-  isDirectory: boolean;
-}
-
-export interface MemoryFileContent {
-  path: string;
-  content: string;
-  size: number;
-  modifiedAt: number;
-}
+import type { MemoryFile, MemoryFileContent } from "./types";
 
 const MEMORY_DIR = join(homedir(), "clawd", "memory");
 const MEMORY_MD = join(homedir(), "clawd", "MEMORY.md");
@@ -102,24 +88,4 @@ export async function writeMemoryFile(relativePath: string, content: string): Pr
   }
   
   await writeFile(fullPath, content, "utf-8");
-}
-
-export function formatFileSize(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
-}
-
-export function isMarkdownFile(name: string): boolean {
-  return name.endsWith(".md");
-}
-
-export function isDateFile(name: string): boolean {
-  // Matches YYYY-MM-DD.md or YYYY-MM-DD-*.md
-  return /^\d{4}-\d{2}-\d{2}(-.*)?\.md$/.test(name);
-}
-
-export function extractDate(name: string): string | null {
-  const match = name.match(/^(\d{4}-\d{2}-\d{2})/);
-  return match ? match[1] : null;
 }
