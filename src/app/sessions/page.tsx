@@ -70,7 +70,7 @@ export default function SessionsPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-primary text-hex-glow">Sessions</h1>
-            <p className="text-muted-foreground">Active conversation sessions</p>
+            <p className="text-muted-foreground">Each session is a separate conversation context — like different chat windows. Discord channels, cron jobs, and sub-agents each get their own session.</p>
           </div>
         </div>
         <div className="grid gap-4">

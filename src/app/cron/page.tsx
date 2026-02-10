@@ -98,7 +98,7 @@ export default function CronPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-primary text-hex-glow">Cron Jobs</h1>
-            <p className="text-muted-foreground">Scheduled tasks and automation</p>
+            <p className="text-muted-foreground">Scheduled tasks — things I do automatically (morning briefings, reminders, weekly cleanups)</p>
           </div>
         </div>
         <div className="grid gap-4">
@@ -117,7 +117,7 @@ export default function CronPage() {
         <div>
           <h1 className="text-2xl font-bold text-primary text-hex-glow">Cron Jobs</h1>
           <p className="text-muted-foreground">
-            {jobs.length} scheduled task{jobs.length !== 1 ? "s" : ""}
+            {jobs.length} scheduled task{jobs.length !== 1 ? "s" : ""} — things I do automatically
           </p>
         </div>
         <Button

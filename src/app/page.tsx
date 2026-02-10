@@ -225,13 +225,13 @@ export default function StatusPage() {
       <Card>
         <CardHeader>
           <CardTitle>Recent Sessions</CardTitle>
-          <CardDescription>Latest active conversation sessions</CardDescription>
+          <CardDescription>Active conversations — each session is a separate chat context (Discord, cron jobs, sub-agents, etc.)</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {recentSessions.slice(0, 5).map((session: SessionInfo) => (
+            {recentSessions.slice(0, 5).map((session: SessionInfo, index: number) => (
               <div
-                key={session.sessionId}
+                key={session.sessionId || session.key || index}
                 className="flex items-center justify-between p-3 rounded-lg bg-muted/50"
               >
                 <div className="flex items-center gap-3 min-w-0">
