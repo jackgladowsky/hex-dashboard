@@ -16,7 +16,7 @@ import {
   Timer,
   AlertCircle,
 } from "lucide-react";
-import { formatAge, formatDuration } from "@/lib/types";
+import { formatAge, formatDuration, getCronDescription, getHumanSchedule } from "@/lib/types";
 import type { CronJob, CronListResponse } from "@/lib/types";
 
 export default function CronPage() {
@@ -152,9 +152,12 @@ export default function CronPage() {
                   </div>
                   <div>
                     <CardTitle className="text-lg">{job.name}</CardTitle>
-                    <CardDescription className="font-mono text-xs mt-1">
-                      {formatSchedule(job.schedule)}
+                    <CardDescription className="text-sm mt-1">
+                      {getCronDescription(job)}
                     </CardDescription>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {getHumanSchedule(job.schedule.expr, job.schedule.tz)}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">

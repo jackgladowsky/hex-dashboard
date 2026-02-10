@@ -15,7 +15,7 @@ import {
   Terminal,
   Clock,
 } from "lucide-react";
-import { formatAge, formatTokens } from "@/lib/types";
+import { formatAge, formatTokens, getHumanSessionName, getSessionDescription } from "@/lib/types";
 import type { GatewayHealth, SessionInfo } from "@/lib/types";
 
 interface StatusData {
@@ -229,7 +229,10 @@ export default function StatusPage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {recentSessions.slice(0, 5).map((session: SessionInfo, index: number) => (
+            {recentSessions.slice(0, 5).map((session: SessionInfo, index: number) => {
+              const humanName = getHumanSessionName(session.key);
+              const description = getSessionDescription(session);
+              return (
               <div
                 key={session.sessionId || session.key || index}
                 className="flex items-center justify-between p-3 rounded-lg bg-muted/50"
@@ -237,9 +240,9 @@ export default function StatusPage() {
                 <div className="flex items-center gap-3 min-w-0">
                   <Clock className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                   <div className="min-w-0">
-                    <p className="font-mono text-sm truncate">{session.key}</p>
+                    <p className="font-medium text-sm">{humanName}</p>
                     <p className="text-xs text-muted-foreground">
-                      {formatAge(session.age ?? session.ageMs ?? 0)} • {session.model ?? "unknown"}
+                      {description} • {formatAge(session.age ?? session.ageMs ?? 0)}
                     </p>
                   </div>
                 </div>
@@ -265,7 +268,8 @@ export default function StatusPage() {
                   )}
                 </div>
               </div>
-            ))}
+            );
+            })}
           </div>
         </CardContent>
       </Card>

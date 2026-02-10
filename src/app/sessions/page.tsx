@@ -16,7 +16,7 @@ import {
   Calendar,
   Bot,
 } from "lucide-react";
-import { formatAge, formatTokens, parseSessionKey, getSessionIcon } from "@/lib/types";
+import { formatAge, formatTokens, parseSessionKey, getSessionIcon, getHumanSessionName, getSessionDescription } from "@/lib/types";
 import type { SessionInfo, SessionsListResponse } from "@/lib/types";
 
 export default function SessionsPage() {
@@ -132,8 +132,9 @@ export default function SessionsPage() {
                 <ScrollArea className="h-[300px] pr-4">
                   <div className="space-y-3">
                     {typeSessions.map((session) => {
-                      const { target } = parseSessionKey(session.key);
                       const isSelected = selectedSession?.sessionId === session.sessionId;
+                      const humanName = getHumanSessionName(session.key);
+                      const description = getSessionDescription(session);
                       
                       return (
                         <div
@@ -147,8 +148,11 @@ export default function SessionsPage() {
                         >
                           <div className="flex items-start justify-between gap-4">
                             <div className="min-w-0 flex-1">
-                              <p className="font-mono text-sm truncate text-foreground">
-                                {target || session.kind}
+                              <p className="font-medium text-sm truncate text-foreground">
+                                {humanName}
+                              </p>
+                              <p className="text-xs text-muted-foreground mt-0.5">
+                                {description}
                               </p>
                               <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
                                 <span className="flex items-center gap-1">

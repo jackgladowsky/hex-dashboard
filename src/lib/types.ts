@@ -144,6 +144,19 @@ export function formatTokens(tokens: number): string {
   return `${(tokens / 1000000).toFixed(2)}M`;
 }
 
+// Known Discord channels for human-readable names
+const KNOWN_CHANNELS: Record<string, string> = {
+  "1464759031691219006": "#general",
+  // Add more as needed
+};
+
+// Known cron job descriptions
+const CRON_DESCRIPTIONS: Record<string, string> = {
+  "Evening Recap": "Summarizes your day — what happened, pending tasks, tomorrow's calendar",
+  "Morning Briefing": "Checks emails, GitHub notifications, and pending applications each morning",
+  "Weekly Memory Cleanup": "Reviews and consolidates memory files, updates long-term memory",
+};
+
 export function parseSessionKey(key: string): {
   agent: string;
   type: string;
@@ -159,6 +172,112 @@ export function parseSessionKey(key: string): {
   const target = parts.slice(3).join(":");
   
   return { agent, type, target };
+}
+
+export function getHumanSessionName(key: string): string {
+  const { type, target } = parseSessionKey(key);
+  
+  switch (type) {
+    case "main":
+      return "Direct Chat";
+    case "discord":
+      if (target) {
+        // Try to resolve channel ID to name
+        const channelName = KNOWN_CHANNELS[target] || `Discord`;
+        return channelName;
+      }
+      return "Discord";
+    case "whatsapp":
+      return "WhatsApp";
+    case "cron":
+      return "Scheduled Task";
+    case "subagent":
+      return "Background Task";
+    default:
+      return type || "Chat";
+  }
+}
+
+export function getSessionDescription(session: SessionInfo): string {
+  const { type, target } = parseSessionKey(session.key);
+  
+  switch (type) {
+    case "main":
+      return "Direct conversation with you";
+    case "discord":
+      return "Messages from Discord";
+    case "whatsapp":
+      return "Messages from WhatsApp";
+    case "cron":
+      return "Automated scheduled task";
+    case "subagent":
+      return "Background task I spawned";
+    default:
+      return "Conversation session";
+  }
+}
+
+export function getCronDescription(job: CronJob): string {
+  // Check if we have a known description
+  if (CRON_DESCRIPTIONS[job.name]) {
+    return CRON_DESCRIPTIONS[job.name];
+  }
+  
+  // Otherwise, try to extract meaning from the payload
+  const msg = job.payload?.message || "";
+  if (msg.toLowerCase().includes("email")) {
+    return "Checks and reports on emails";
+  }
+  if (msg.toLowerCase().includes("calendar")) {
+    return "Checks calendar events";
+  }
+  if (msg.toLowerCase().includes("memory")) {
+    return "Manages memory and notes";
+  }
+  if (msg.toLowerCase().includes("briefing") || msg.toLowerCase().includes("recap")) {
+    return "Sends a summary update";
+  }
+  
+  return "Scheduled automated task";
+}
+
+export function getHumanSchedule(expr: string, tz: string): string {
+  // Parse common cron expressions into human-readable format
+  const parts = expr.split(" ");
+  if (parts.length !== 5) return expr;
+  
+  const [minute, hour, dayOfMonth, month, dayOfWeek] = parts;
+  
+  // Daily at specific time
+  if (dayOfMonth === "*" && month === "*" && dayOfWeek === "*") {
+    const h = parseInt(hour);
+    const m = parseInt(minute);
+    const timeStr = formatTime(h, m);
+    return `Daily at ${timeStr}`;
+  }
+  
+  // Weekly on specific day
+  if (dayOfMonth === "*" && month === "*" && dayOfWeek !== "*") {
+    const h = parseInt(hour);
+    const m = parseInt(minute);
+    const timeStr = formatTime(h, m);
+    const dayName = getDayName(parseInt(dayOfWeek));
+    return `Every ${dayName} at ${timeStr}`;
+  }
+  
+  return expr;
+}
+
+function formatTime(hour: number, minute: number): string {
+  const period = hour >= 12 ? "PM" : "AM";
+  const h = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+  const m = minute.toString().padStart(2, "0");
+  return `${h}:${m} ${period}`;
+}
+
+function getDayName(day: number): string {
+  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  return days[day] || "day";
 }
 
 export function getSessionIcon(type: string): string {
